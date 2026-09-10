@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "usuarios")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,6 +15,7 @@ public class Usuario {
     private String sobrenome;
     @Column(unique = true)
     private String email;
+    private String tipo;
     private String senha;
     private boolean isConfirmado = false;
     private Byte situacao;
