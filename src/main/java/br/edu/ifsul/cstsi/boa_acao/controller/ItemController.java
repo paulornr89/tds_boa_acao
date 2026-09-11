@@ -5,6 +5,7 @@ import br.edu.ifsul.cstsi.boa_acao.model.ItemDto;
 import br.edu.ifsul.cstsi.boa_acao.repository.ItemRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -50,18 +51,37 @@ public class ItemController {
     }
 
     @PostMapping
-    public String insert(@RequestBody Item item) {
-        return "insert " + item;
+    public ResponseEntity<ItemDto> insert(@RequestBody ItemDto itemDto, UriComponentsBuilder uriBuilder) {
+        var item = itemRepository.save(new Item(
+                null,
+                itemDto.descricao(),
+                itemDto.unidade(),
+                itemDto.tipo()
+        ));
+        var location = uriBuilder.path("api/v1/itens/{id}").buildAndExpand(item.getId()).toUri();
+        return ResponseEntity.created(location).body(new ItemDto(item));
     }
 
     @PutMapping("{id}")
-    public String update(@PathVariable(value = "id") Long id, @RequestBody Item item) {
-        return "update " + item;
+    public ResponseEntity<ItemDto> update(@PathVariable(value = "id") Long id, @RequestBody ItemDto itemDto) {
+        var item = itemRepository.save(new Item(
+                id,
+                itemDto.descricao(),
+                itemDto.unidade(),
+                itemDto.tipo()
+        ));
+        return item != null ?
+                ResponseEntity.ok(new ItemDto(item)) :
+                ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("{id}")
-    public String delete(@PathVariable(value = "id") Long id) {
-        return "delete " + id;
+    public ResponseEntity<String> delete(@PathVariable(value = "id") Long id) {
+        if (itemRepository.existsById(id)) {
+            itemRepository.deleteById(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
 }
