@@ -1,5 +1,9 @@
 package br.edu.ifsul.cstsi.boa_acao.model;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -7,6 +11,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "doacoes")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Doacao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
