@@ -4,6 +4,7 @@ import br.edu.ifsul.cstsi.boa_acao.model.Item;
 import br.edu.ifsul.cstsi.boa_acao.model.ItemDto;
 import br.edu.ifsul.cstsi.boa_acao.repository.ItemRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -51,6 +52,7 @@ public class ItemController {
     }
 
     @PostMapping
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<ItemDto> insert(@RequestBody ItemDto itemDto, UriComponentsBuilder uriBuilder) {
         var item = itemRepository.save(new Item(
                 null,
