@@ -1,26 +1,38 @@
 package br.edu.ifsul.cstsi.boa_acao.infra.doc;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+//indica que essa classe deve ser adicionada ao Contexto do aplicativo como um Bean de Configuração da Documentação da API
 public class SpringDocConfiguration {
-
     @Bean
     public OpenAPI customOpenAPI() {
+        final String securitySchemeName = "bearerAuth";
         return new OpenAPI()
+                .addSecurityItem(new SecurityRequirement()
+                        .addList(securitySchemeName))
+                .components(new Components()
+                        .addSecuritySchemes(securitySchemeName, new SecurityScheme()
+                                .name(securitySchemeName)
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT")))
                 .info(new Info()
-                        .title("API Boa Ação - Sistema Para Intermediar Doações")
-                        .description("API REST para gestão de doadores, organizações parceiras e doações.")
+                        .title("API de Exemplo Desenvolvida para as Aulas de TDS")
+                        .description("API Rest da aplicação tds_app_exemplo, contendo todas as técnicas necessárias para trabalhar com Spring Boot.")
                         .contact(new Contact()
-                                .name("Paulo Rosa")
-                                .email("paulorosa.pl013@academico.ifsul.edu.br"))
+                                .name("Time Aulas TDS")
+                                .email("tads@ifsul.edu.br"))
                         .license(new License()
                                 .name("Apache 2.0")
-                                .url("http://localhost:8080/licenca")));
+                                .url("http://localhost:8080/api/licenca")));
     }
 }
