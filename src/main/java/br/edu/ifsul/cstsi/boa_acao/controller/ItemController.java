@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class ItemController {
 
     @PostMapping
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<ItemDto> insert(@RequestBody ItemDto itemDto, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<ItemDto> insert(@Valid @RequestBody ItemDto itemDto, UriComponentsBuilder uriBuilder) {
         var item = itemRepository.save(new Item(
                 null,
                 itemDto.descricao(),
@@ -65,7 +66,7 @@ public class ItemController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<ItemDto> update(@PathVariable(value = "id") Long id, @RequestBody ItemDto itemDto) {
+    public ResponseEntity<ItemDto> update(@PathVariable(value = "id") Long id, @Valid @RequestBody ItemDto itemDto) {
         var item = itemRepository.save(new Item(
                 id,
                 itemDto.descricao(),
