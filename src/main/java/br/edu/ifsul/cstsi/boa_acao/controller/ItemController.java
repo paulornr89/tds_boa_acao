@@ -2,6 +2,8 @@ package br.edu.ifsul.cstsi.boa_acao.controller;
 
 import br.edu.ifsul.cstsi.boa_acao.model.Item;
 import br.edu.ifsul.cstsi.boa_acao.model.ItemDto;
+import br.edu.ifsul.cstsi.boa_acao.model.ItemDtoPost;
+import br.edu.ifsul.cstsi.boa_acao.model.ItemDtoPut;
 import br.edu.ifsul.cstsi.boa_acao.repository.ItemRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -54,24 +56,24 @@ public class ItemController {
 
     @PostMapping
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<ItemDto> insert(@Valid @RequestBody ItemDto itemDto, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<ItemDto> insert(@Valid @RequestBody ItemDtoPost itemDtoPost, UriComponentsBuilder uriBuilder) {
         var item = itemRepository.save(new Item(
                 null,
-                itemDto.descricao(),
-                itemDto.unidade(),
-                itemDto.tipo()
+                itemDtoPost.descricao(),
+                itemDtoPost.unidade(),
+                itemDtoPost.tipo()
         ));
         var location = uriBuilder.path("api/v1/itens/{id}").buildAndExpand(item.getId()).toUri();
         return ResponseEntity.created(location).body(new ItemDto(item));
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<ItemDto> update(@PathVariable(value = "id") Long id, @Valid @RequestBody ItemDto itemDto) {
+    public ResponseEntity<ItemDto> update(@PathVariable(value = "id") Long id, @Valid @RequestBody ItemDtoPut itemDtoPut) {
         var item = itemRepository.save(new Item(
                 id,
-                itemDto.descricao(),
-                itemDto.unidade(),
-                itemDto.tipo()
+                itemDtoPut.descricao(),
+                itemDtoPut.unidade(),
+                itemDtoPut.tipo()
         ));
         return item != null ?
                 ResponseEntity.ok(new ItemDto(item)) :
